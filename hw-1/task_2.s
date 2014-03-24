@@ -3,6 +3,8 @@ fmt_string:
 	.string "%d"
 int:
 	.space 4
+fmt_print:
+	.string "\n"	
 .text
 .globl main
 main:
@@ -31,6 +33,8 @@ print:
 	popl %ecx
 	loop shear
 //epilog
+	pushl $fmt_print
+	call printf
 	movl %ebp, %esp
 	popl %ebp
 	ret
