@@ -35,6 +35,7 @@ print:
 //epilog
 	pushl $fmt_print
 	call printf
+	movl $0, %eax
 	movl %ebp, %esp
 	popl %ebp
 	ret
