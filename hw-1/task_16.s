@@ -54,9 +54,13 @@ label_print:
 	pushl %ebx
 	pushl $format_string
 	call printf
+	pushl $pr
+	call printf
 	jmp epilog
 label_print_other:
 	pushl $format_string_other
+	call printf
+	pushl $pr
 	call printf
 epilog:
   movl $0, %eax
