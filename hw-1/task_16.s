@@ -5,6 +5,8 @@ format_string_other:
 	.string "Other"
 int_label:
 	.space 4
+pr:
+	.string "\n"
 .text
 .globl main
 main:
