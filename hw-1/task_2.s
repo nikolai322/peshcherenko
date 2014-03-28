@@ -15,6 +15,7 @@ print_0:
 	pushl $0
 	pushl $format_string
 	call printf
+	addl $8, %esp
 	jmp finish
 .globl main
 main:
