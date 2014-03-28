@@ -6,6 +6,11 @@ int_label:
 fmt_print:
 	.string "\n"
 .text
+print_0:
+	pushl $0
+	pushl $format_string
+	call printf
+	jmp finish
 .globl main
 main:
 //prolog
@@ -41,11 +46,15 @@ print:
 	popl %ecx
 loop_end:
 	loop shear
+	cmpl $1, %edx
+	jne print_0
+finish:
 	pushl $fmt_print
 	call printf
-	addl $4, %esp
-	movl $0, %eax
+	addl $12, %esp
+	
 //epilog
+	movl $0, %eax
 	movl %ebp, %esp	
 	popl %ebp
 	ret
