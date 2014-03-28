@@ -3,6 +3,8 @@ format_string:
 	.string "%d"
 int_label:
 	.space 4
+pr:
+	.string "\n"
 .text
 .globl main
 main:
@@ -40,7 +42,10 @@ loop_end:
 	call printf
 	addl $8, %esp
 //epilog
-  movl $0, %eax
+  	pushl $pr
+	call printf
+	movl $0, %eax
+	addl $8, %esp
 	movl %ebp, %esp	
 	popl %ebp
 	ret
