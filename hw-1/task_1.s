@@ -10,6 +10,7 @@ print_0:
 	pushl $0
 	pushl $format_string
 	call printf
+	addl $8, %esp	
 	jmp finish
 .globl main
 main:
@@ -51,7 +52,7 @@ loop_end:
 finish:
 	pushl $fmt_print
 	call printf
-	addl $12, %esp
+	addl $4, %esp
 	
 //epilog
 	movl $0, %eax
