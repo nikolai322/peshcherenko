@@ -1,41 +1,74 @@
 .data
-fmt_string:
+format_string:
 	.string "%d"
-int:
+int_label:
 	.space 4
 fmt_print:
-	.string "\n"	
+	.string "\n"
+minus:
+	.string "-"	
 .text
+label_zero:
+	movl $1, %eax
+	jmp continue
+print_0:
+	pushl $0
+	pushl $format_string
+	call printf
+	jmp finish
 .globl main
 main:
 //prolog
 	pushl %ebp
 	movl %esp, %ebp
-//main program
-	pushl $int
-	pushl $fmt_string
+//read input data
+	pushl $int_label
+	pushl $format_string
 	call scanf
-	movl int, %eax
-	movl $32, %ecx 
+	addl $8, %esp
+//main program
+	movl int_label, %ebx
+	shll $1, %ebx
+	jnb label_zero
+	pushl $minus
+	call printf
+	movl $0, %eax
+	subl $1, %eax
+continue:
+	movl int_label, %ebx
+	mull %ebx
+	movl $32, %ecx
+	movl $0, %edx
 shear:
 	shll $1, %eax
 	movl $0, %ebx
-	jnc print
+	jnb print
 	incl %ebx
-print: 
+	movl $1, %edx
+print:
+	cmpl $1, %edx
+	jne loop_end
 	pushl %ecx
 	pushl %eax
+	pushl %edx
 	pushl %ebx
-	pushl $fmt_string
+	pushl $format_string
 	call printf
 	addl $8, %esp
+	popl %edx
 	popl %eax
 	popl %ecx
+loop_end:
 	loop shear
-//epilog
+	cmpl $1, %edx
+	jne print_0
+finish:
 	pushl $fmt_print
 	call printf
+	addl $4, %esp
+	
+//epilog
 	movl $0, %eax
-	movl %ebp, %esp
+	movl %ebp, %esp	
 	popl %ebp
 	ret
