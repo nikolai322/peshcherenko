@@ -17,23 +17,23 @@ main:
 	addl $8, %esp
 /*This is a code that will be written in C like this:
 int eax, ecx;
-eax = 0;
+eax = 1;
 scanf("%d",&ebx);
 while (ecx < ebx)
 	{
 	eax = eax + ecx;
-	ecx++;
+	ecx = ecx + 2;
 	}
 printf("%d",eax);
 */
 	movl $0, %eax
-	movl $0, %ecx
+	movl $1, %ecx
 	movl int_label, %ebx	
 loop_start:
 	cmpl %ecx, %ebx
 	je loop_end
 	addl %ecx, %eax
-	addl $1, %ecx
+	addl $2, %ecx
 	jmp loop_start
 loop_end:
 //print
