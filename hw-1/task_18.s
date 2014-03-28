@@ -20,29 +20,29 @@ int eax, ecx;
 eax = 1;
 scanf("%d",&ebx);
 while (ecx < ebx)
-	{
-	eax = eax + ecx;
-	ecx = ecx + 2;
-	}
+{
+eax = eax + ecx;
+ecx = ecx + 2;
+}
 printf("%d",eax);
 */
 	movl $0, %eax
 	movl $1, %ecx
 	movl int_label, %ebx	
-loop_start:
+	loop_start:
 	cmpl %ecx, %ebx
-	je loop_end
+	jl loop_end
 	addl %ecx, %eax
 	addl $2, %ecx
 	jmp loop_start
-loop_end:
+	loop_end:
 //print
 	pushl %eax
 	pushl $format_string
 	call printf
 	addl $8, %esp
 //epilog
-  	pushl $pr
+   	pushl $pr
 	call printf
 	movl $0, %eax
 	addl $8, %esp
