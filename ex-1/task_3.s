@@ -11,6 +11,8 @@ fmt_str:
 	.string "%s"
 n:
 	.long 8
+pr:
+	.string "\n"
 .text
 print_0:
 	pushl %ecx
@@ -64,6 +66,9 @@ continue:
 finish:
 	loop begin
 //epilog
+	pushl $pr
+	call printf
+	addl $4, %esp
 	movl $0, %eax
 	movl %ebp, %esp
 	popl %ebp
