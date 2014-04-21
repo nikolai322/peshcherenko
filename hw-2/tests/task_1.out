@@ -1,6 +1,3 @@
-and=0
-or=134520895
-xor=134520839
-not=-33
-not_equal
-shear=128
+unsigned
+not=-1
+shear=0
