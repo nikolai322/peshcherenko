@@ -3,27 +3,21 @@ int:
 	.space 4
 fmt_int:
 	.string "%d"
-fmt_and:
-	.string "and=%d\n"
-fmt_or:
-	.string "or=%d\n"
-fmt_xor:
-	.string "xor=%d\n"
 fmt_not:
 	.string "not=%d\n"
 fmt_shear:
 	.string "shear=%d\n"
-fmt_equal:
-	.string "equal\n"
-fmt_not_equal:
-	.string "not_equal\n"
+fmt_signed:
+	.string "signed\n"
+fmt_unsigned:
+	.string "unsigned\n"
 .text
-equal:
-	pushl $fmt_equal
+signed:
+	pushl $fmt_signed
 	call printf
 	jmp continue
-not_equal:
-	pushl $fmt_not_equal
+unsigned:
+	pushl $fmt_unsigned
 	call printf
 	jmp continue
 .globl main
@@ -44,30 +38,11 @@ main:
 	call scanf
 	popl %eax
 	movl int, %ebx
-#and command usage
-	andl %eax, %ebx
-	pushl %eax
-	pushl %ebx
-	pushl $fmt_and
-	call printf
-	popl %eax
-	movl int, %ebx
-#or command usage
-	orl %eax, %ebx
-	pushl %eax
-	pushl %ebx
-	pushl $fmt_or
-	call printf
-	popl %eax
-	movl int, %ebx
-#xor command usage
-	xorl %eax, %ebx
-	pushl %eax
-	pushl %ebx
-	pushl $fmt_xor
-	call printf
-	popl %eax
-	movl int, %ebx
+#test command usage
+	testl %ebx, %ebx
+	js signed
+	jmp unsigned
+continue:
 #not command usage
 	notl %ebx
 	pushl %eax
@@ -76,11 +51,6 @@ main:
 	call printf
 	popl %eax
 	movl int, %ebx
-#test command usage
-	testl %eax, %ebx
-	jne equal
-	jmp not_equal
-continue:
 #shear logical left command usage
 	shll $2, %ebx
 	pushl %eax
@@ -88,7 +58,7 @@ continue:
 	pushl $fmt_shear
 	call printf
 	popl %eax
-	movl int, %ebx		
+	movl int, %ebx	
 //epilog
 	movl %ebp, %esp
 	popl %ebp
