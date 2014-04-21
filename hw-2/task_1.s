@@ -26,17 +26,10 @@ main:
 	pushl %ebp
 	movl %esp, %ebp
 #main program
-#read the first number
+#read the number
 	pushl $int
 	pushl $fmt_int
 	call scanf
-	movl int, %eax
-	pushl %eax
-#read the second number
-	pushl $int	
-	pushl $fmt_int
-	call scanf
-	popl %eax
 	movl int, %ebx
 #test command usage
 	testl %ebx, %ebx
@@ -53,11 +46,9 @@ continue:
 	movl int, %ebx
 #shear logical left command usage
 	shll $2, %ebx
-	pushl %eax
 	pushl %ebx
 	pushl $fmt_shear
 	call printf
-	popl %eax
 	movl int, %ebx	
 //epilog
 	movl %ebp, %esp
