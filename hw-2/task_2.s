@@ -79,7 +79,7 @@ begin:
 	movl $str_in_2, %edi
 	rep movsb
 #This part of code returns the string with zero at the
-#certain place if str_in_1 is greater than str_in_2 and 0 otherwise
+#certain place if str_in_1 character is greater than str_in_2 and 0 otherwise
 	movl $4, count
 	movl $str_in_1, %esi
 	movl $str_in_2, %edi
