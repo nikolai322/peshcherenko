@@ -94,6 +94,7 @@ continue:
 	pushl $pr
 	call printf
 #epilog
+  	movl $0, %eax
 	movl %ebp, %esp
 	popl %ebp
 	ret
