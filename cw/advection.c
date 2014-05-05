@@ -28,7 +28,7 @@ int main()
 	int j;
 	double a, b;
 	i = 0;
-	while (i < 1)
+	while (i < 2/(cx*tau)) //1 period
 		{
 		for (j = 0; j < N-1; j++)
 			{
