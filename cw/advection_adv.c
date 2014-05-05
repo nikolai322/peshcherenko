@@ -39,8 +39,7 @@ int main()
 //here um stands for a u(xm), dum for derivative of u in xm
 //extrapolation as a polinom ax^3+bx^2+cx+d
 	i = 0;
-	while (i < 1000)
-		{
+	while (i < 2/(cx*tau)) //1 period		{
 		for (j = 0; j < N-1; j++)
 			{
 //description of new values
