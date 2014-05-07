@@ -3,29 +3,33 @@ x:
 	.space 4
 y:
 	.space 4
-sign:
+z:
 	.space 4
-one:
+eps:
 	.space 4
 num:
 	.space 4
-
 fmt_float:
 	.string "%f"
 pr:
 	.string "\n"
-err_str:
-	.string "The error while reading input data has occured. Please try again\n"
+str_less:
+	.string "z < 1\n"
+str_eq:
+	.string "z == 1\n"
+sign:
+	.space 4
 .text
-error:
-	pushl $err_str
-	call printf
-	addl $8, %esp
-	jmp epilog
-zero_check:
-	cmpl $0, %ebx
-	je error
-	jmp continue
+sign_adjust:
+	movl $1, sign
+	flds z
+	fabs
+	fstps z
+	jmp go_on_1
+change_sign:
+	fld1
+	fdivp %st, %st(1)
+	jmp finish
 .globl main
 main:
 #prolog
@@ -38,78 +42,72 @@ main:
 	pushl $y
 	pushl $fmt_float
 	call scanf
-	addl $16, %esp
-#And here goes magic
-#Parsing all possible errors in input data
-	movl x, %eax
-	movl y, %ebx
-	cmpl $0, %eax
-	jl error
-	je zero_check
-#the main part of this program
-continue:
-	movl $0, sign
-go_on:
-	fldl y
-	fldl x #Now x is in st(0), y is in st(1)
-	ftst #compares x with 0
-	fstsw %ax
-	sahf
-	jnc m1 #if (x > 0) goto m1
-	incl sign
-	fabs #y = fabs(y);
-m1:
-	fxch #swap(y,x)
-	fyl2x #st(0) = y*log2(x) == z
-	fst %st(1) #Stores z in st(1)
-	fabs
-	fld1 #pushl $1
-	fcom #Here we compare z with 1
-	fstsw %ax
-	sahf
-	jnc m2 #if (z < 1) goto m2
-	jz m3 #if (z == 1) goto m3
-	xor %ecx, %ecx #counter = 0
-m12:
-	incl %ecx #counter++
-	fsub %st, %st(1) #z = z - 1
-	fcom #Comparison between z and 1
-	fstsw %ax
-	sahf
-	jz m12 # in case z==1
-	jnc m2 # in case z < 1
-	jmp m12 # in case z > 1
-m3:
-	movl $1, num
-	jmp if_1
-m2:
-	movl %ecx, num
-	fxch #swap(1,z); now in st(0) is 1, in st(1) is z
-	f2xm1 #calculates 2^z - 1
-	faddp # calculates 1 + 2^z - 1 = 2^z
-	fild num #pushl $num; In st(0) is now stored num
-if_1:
-	fld1 #pushl $1 #In st(0) is now stored 1, in st(1) is stored num
-	fscale #Now in st(0) is stored 2^num
-	fxch 
-	fincstp #It increments stack pointer
-#Now in st(0) is stored 2^num and 2^z
-	fmulp # It multiplies 2^num and 2^z
-#check for the sign of y
-	cmpl $1, sign
-	jnz finish
+	movl $0x3f800000, %eax
+	movl %eax, eps #Now in esp is stored 1.00000001. It will be 
+#used for comparison with 1
+	flds y
+	flds x #Now x is in st(0), y is in st(1)
+	fyl2x
+	fstps z
+	flds eps #comparison with 0
 	fld1
-	fxch #swaps st(0) with st(1)
-	fdivp #calculates 2^(-y*log2(x))
-finish:
-	fstpl 4(%esp)
+	fsubrp %st, %st(1)
+	flds z	
+	fxch %st(1)
+	fucomip %st(1), %st
+	fstp %st(0)
+	seta %al
+	testb %al, %al
+	jne sign_adjust
+	movl $0, sign #If sign == 0 then z > 0
+go_on_1:
+	movl $0, %ecx
+	jmp begin
+go_on:
+	flds z
+	fld1
+	fsubrp %st, %st(1)
+	fstps z # z = z - 1;
+	incl %ecx
+begin:
+	flds z
+	fld1
+	fsubrp %st, %st(1)
+	fabs
+	flds eps
+	fxch %st(1)
+	fucomip %st(1), %st
+	fstp %st(0)
+	seta %al
+	testb %al, %al
+	jne go_on # If z > 1 then repeat (go_on)	
+continue:
+	flds z
+	fld1
+	fsubrp %st, %st(1)
+	fstps z # z = z - 1;
+	flds z
+	f2xm1
+	fld1
+	faddp %st, %st(1)
+	fstps z #z = (2^z - 1) + 1 
+	movl %ecx, num
+	incl num
+	fild num
+	fld1
+	fscale
+	flds z
+	fmulp %st, %st(1)
+	cmpl $0, sign
+	jne change_sign
+finish:	
 	movl $fmt_float, %eax
+	fstpl 4(%esp)
 	movl %eax, (%esp)
 	call printf
 	pushl $pr
 	call printf
-	addl $12, %esp 
-epilog:
+#epilog
 	movl $0, %eax
 	movl %ebp, %esp
 	popl %ebp
