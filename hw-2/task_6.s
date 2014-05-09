@@ -58,7 +58,7 @@ continue_3:
 continue_4:
 .endm
 .globl main
-main:
+print:
 #prolog
 	pushl %ebp
 	movl %esp, %ebp
@@ -80,7 +80,16 @@ start:
 	cmpl $0, count
 	jg start
 #epilog
-  movl $0, %eax
+	movl %ebp, %esp
+	popl %ebp
+	ret
+main:
+#prolog
+	pushl %ebp
+	movl %esp, %ebp
+	call print
+#epilog
+	movl $0, %eax
 	movl %ebp, %esp
 	popl %ebp
 	ret
