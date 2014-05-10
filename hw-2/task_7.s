@@ -6,7 +6,7 @@ out:
 error_str:
 	.string "The error"
 of_str:
-	.string "There is too bloody much of input data"
+	.string "There is too much of input data"
 pr:
 	.string "\n"
 a:
