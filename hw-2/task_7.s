@@ -93,13 +93,16 @@ exit:
 	popl %ebp
 	ret
 print:
+#It obtains the pointer to the string and its length
 #prolog
 	pushl %ebp
 	movl %esp, %ebp
 	movl $0, count
 	movl 12(%ebp), %ebx
+#%ebx becomes the pointer to a string which we are trying to print 	
 	movl 8(%ebp), %ecx
 	movl %ecx, max
+#max becomes the number of symbols in the string	
 	movl %ebx, a
 begin_1:
 	pushl (%ebx)
@@ -116,7 +119,7 @@ begin_1:
 #epilog
 	movl %ebp, %esp
 	popl %ebp
-	ret	
+	ret
 main:
 #prolog
 	pushl %ebp
