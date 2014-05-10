@@ -81,6 +81,7 @@ begin_3:
 	movl a, %ecx
 	movl %ecx, (%eax)
 	incl len_out
+#Here we wrote in out string only unrepeating symbols	
 exit:
 	incl %ebx
 	incl count
