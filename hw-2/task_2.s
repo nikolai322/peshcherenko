@@ -53,7 +53,6 @@ main:
 	pushl $str_in_2
 	pushl $fmt_string
 	call scanf
-#And here goes magic
 #The search of '!' in the second string
 	movl $str_in_1, %esi
 	movl $str_in_2, %edi
