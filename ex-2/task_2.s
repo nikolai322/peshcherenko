@@ -9,6 +9,8 @@ t:
 	.space 4
 fmt_float:
 	.string "%f"
+pr:
+	.string "\n"
 .text
 .globl main
 main:
@@ -39,6 +41,8 @@ main:
 	movl $fmt_float, %eax
 	fstpl 4(%esp)
 	movl %eax, (%esp)
+	call printf
+	pushl $pr
 	call printf
 #epilog
 	movl $0, %eax
