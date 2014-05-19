@@ -5,8 +5,8 @@ int main()
 {
 	int i, j, k;
 //declaration of all variables we will need
-	int Nx = 10;//Nx is the number of nodes alongside x axis
-	int Ny = 10;
+	int Nx = 100;//Nx is the number of nodes alongside x axis
+	int Ny = 100;
 	double cx = 1.0;
 	double cy = 1.0;
 	double kx = 0.6;
@@ -48,7 +48,7 @@ int main()
 		while (z < 2/(cx*taux))
 		{
 //shear alongside x axis
-		for (k = 0; k < Ny-1; k++)
+		for (k = 0; k < Ny; k++)
 			{	
 		for (j = 0; j < Nx-1; j++)
 			{
@@ -62,7 +62,7 @@ int main()
 			}
 		w++;
 //shear alongside y axis
-		for (k = 0; k < Nx-1; k++)
+		for (k = 0; k < Nx; k++)
 			{	
 		for (j = 0; j < Ny-1; j++)
 			{
@@ -76,8 +76,8 @@ int main()
 			}
 		z++;
 //current array update
-		for (k = 0; k < Ny-1; k++)	
-			for (j = 0; j < Nx-1; j++)
+		for (k = 0; k < Ny; k++)	
+			for (j = 0; j < Nx; j++)
 				current[j][k] = next[j][k];
 		print(Nx, Ny, current);
 		}
